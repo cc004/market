@@ -4,11 +4,11 @@ class backend:
     def __setitem__(self, indices, value: int):
         raise NotImplementedError
 
-from hoshino.modules.pcrduel.ScoreCounter import ScoreCounter2 as sc
 
 class duel_backend(backend):
     def __init__(self):
-        self.sc = sc()
+        from hoshino.modules.pcrduel.ScoreCounter import ScoreCounter2
+        self.sc = ScoreCounter2()
     
     def __getitem__(self, indices):
         return self.sc._get_score(indices[0], indices[1])
@@ -26,7 +26,7 @@ class json_backend(backend):
         if gid not in self.config.json:
             self.config.json[gid] = {}
         if uid not in self.config.json[gid]:
-            self.config.json[gid][uid] = 0
+            self.config.json[gid][uid] = 1000
 
     def __getitem__(self, indices):
         gid, uid = indices

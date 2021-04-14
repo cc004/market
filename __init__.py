@@ -1,18 +1,24 @@
 from .manager import manager
 from .backend import json_backend, balance, duel_backend
-from .product import sina_product
+from .product import coincap_product, sina_product
 from hoshino.service import Service
 
+# json_backend代表独立的json存储
+# duel_backend代表与pcrduel金币联动的存储
+
+try:
+    be = duel_backend()
+except:
+    be = json_backend()
+
 mgr = manager(
-    # json_backend代表独立的json存储
-    # duel_backend代表与pcrduel金币联动的存储
-    duel_backend(),
+    be,
     balance(),
     [
-        sina_product("sh601005", "大头菜"),
-        sina_product("sh600276", "霓裳花"),
-        sina_product("sh601166", "琉璃百合"),
-        sina_product("sh601012", "琉璃袋"),
+        coincap_product("bitcoin", "大头菜"),
+        coincap_product("ethereum", "霓裳花"),
+        coincap_product("uniswap", "琉璃百合"),
+        coincap_product("xrp", "琉璃袋"),
         sina_product("sh600519", "椰奶"),
     ]
 )
