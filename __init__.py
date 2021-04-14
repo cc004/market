@@ -11,7 +11,6 @@ mgr = manager(
     [
         sina_product("sh601005", "大头菜"),
         sina_product("sh600276", "霓裳花"),
-        sina_product("sh601166", "电气水晶"),
         sina_product("sh601166", "琉璃百合"),
         sina_product("sh601012", "琉璃袋"),
         sina_product("sh600519", "椰奶"),
