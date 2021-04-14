@@ -5,9 +5,32 @@ class backend:
         raise NotImplementedError
 
 
+from importlib import import_module
+
 class duel_backend(backend):
+    @staticmethod
+    def try_to_import_pcrduel_scorecounter():
+        possible_locations = [
+            'hoshino.modules.pcrduel.pcrduel',
+            'hoshino.modules.pcrduel.PcrDuel',
+            'hoshino.modules.pcrduel.ScoreCounter',
+
+            'hoshino.modules.priconne.pcrduel',
+            'hoshino.modules.priconne.PcrDuel',
+            'hoshino.modules.priconne.ScoreCounter',
+
+            'hoshino.modules.priconne.pcrduel.pcrduel',
+            'hoshino.modules.priconne.pcrduel.PcrDuel',
+            'hoshino.modules.priconne.pcrduel.ScoreCounter',
+        ]
+        for loc in possible_locations:
+            try:
+                return import_module(loc)
+            except:
+                pass
+    
     def __init__(self):
-        from hoshino.modules.pcrduel.ScoreCounter import ScoreCounter2
+        ScoreCounter2 = duel_backend.try_to_import_pcrduel_scorecounter().ScoreCounter2
         self.sc = ScoreCounter2()
     
     def __getitem__(self, indices):
