@@ -14,7 +14,7 @@ class sina_product(product):
     
     @property
     async def price(self) -> float:
-        return 100 * float((await (await get("http://hq.sinajs.cn/list=" + self.id)).content).decode('gbk').split(',')[3])
+        return float((await (await get("http://hq.sinajs.cn/list=" + self.id)).content).decode('gbk').split(',')[3])
 
 import json
 
