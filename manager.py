@@ -71,7 +71,14 @@ class manager:
         return f"成功卖出了{item}x{val:.2}，获得了{manager._format_negcost(origin)}"
     
     def list_products(self):
-        content = '\n'.join([f'{product} 当前价格 {manager._format_num(self.products[product].price)}'for product in self.products])
+        contents = []
+        for product in self.products:
+            try:
+                contents.append(f'{product} 当前价格 {manager._format_num(self.products[product].price)}')
+            except RuntimeError:
+                pass
+        
+        content = '\n'.join(contents)
         return f'目前的商品有：\n{content}'
 
     def list_balances(self, gid, uid):
