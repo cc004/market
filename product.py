@@ -60,4 +60,4 @@ class coincap_product(product):
     
     @property
     async def _price(self) -> float:
-        return json.loads(await (await get("https://api.coincap.io/v2/assets/" + self.id)).content.decode('utf8'))['data']['priceUsd']
+        return json.loads((await (await get("https://api.coincap.io/v2/assets/" + self.id)).content).decode('utf8'))['data']['priceUsd']
