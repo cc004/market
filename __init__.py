@@ -1,6 +1,6 @@
 from .manager import manager
 from .backend import json_backend, balance, duel_backend
-from .product import coincap_product, sina_product
+from .product import coincap_product, sina_product, sochain_product
 from hoshino.service import Service
 
 # json_backend代表独立的json存储
@@ -29,11 +29,11 @@ def mgr_lazyload(): # ensure all plugins have been loaded
                 sina_product("sh600276", "霓裳花"),
                 sina_product("sh601166", "琉璃百合"),
                 sina_product("sh601012", "琉璃袋"),
-                #coincap_product("bitcoin", "大头菜"),
-                #coincap_product("ethereum", "霓裳花"),
+                sina_product("sh600519", "椰奶"),
+                sochain_product("bitcoin:usd", "派蒙", multiplier=.1),
+                sochain_product("doge:usd", "优衣", multiplier=10),
                 #coincap_product("uniswap", "琉璃百合"),
                 #coincap_product("xrp", "琉璃袋"),
-                sina_product("sh600519", "椰奶"),
             ]
         )
 

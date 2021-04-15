@@ -6,9 +6,10 @@ from pytz import timezone
 from hoshino.aiorequests import get
 
 class product:
-    def __init__(self, name):
+    def __init__(self, name, multiplier):
         self.name = name
         self.price_cache = None
+        self.multiplier = multiplier
     
     @property
     def price(self) -> float:
@@ -26,7 +27,7 @@ class product:
     
     async def _schedule_wrapper(self):
         try:
-            self.price_cache = await self._price
+            self.price_cache = self.multiplier * await self._price
         except Exception as e:
             self.logger.error(f'exception while caching {self.name}:\n{e}')
 
@@ -43,21 +44,32 @@ class product:
         )(self._schedule_wrapper)
 
 class sina_product(product):
-    def __init__(self, id, name):
+    def __init__(self, id, name, multiplier=1.0):
         self.id = id
-        super().__init__(name)
+        super().__init__(name, multiplier)
     
     @property
     async def _price(self) -> float:
-        return float((await (await get("http://hq.sinajs.cn/list=" + self.id)).content).decode('gbk').split(',')[3])
+        return float((await (await get("http://hq.sinajs.cn/list=" + self.id, timeout=5)).content).decode('gbk').split(',')[3])
 
 import json
 
 class coincap_product(product):
-    def __init__(self, id, name):
+    def __init__(self, id, name, multiplier=1.0):
         self.id = id
-        super().__init__(name)
+        super().__init__(name, multiplier)
     
     @property
     async def _price(self) -> float:
-        return float(json.loads((await (await get("https://api.coincap.io/v2/assets/" + self.id)).content).decode('utf8'))['data']['priceUsd'])
+        return float(json.loads((await (await get("https://api.coincap.io/v2/assets/" + self.id, timeout=10)).content).decode('utf8'))['data']['priceUsd'])
+
+class sochain_product(product):
+    def __init__(self, id, name, multiplier=1.0):
+        ids = id.split(':')
+        self.coin = ids[0]
+        self.base = ids[1]
+        super().__init__(name, multiplier)
+    
+    @property
+    async def _price(self) -> float:
+        return float(json.loads((await (await get(f"https://sochain.com/api/v2/get_price/{self.coin}/{self.base}", timeout=10)).content).decode('utf8'))['data']['prices'][0]['price'])
