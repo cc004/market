@@ -5,34 +5,32 @@ class backend:
         raise NotImplementedError
 
 
+from hoshino.log import new_logger
 from importlib import import_module
+
+from nonebot.plugin import Plugin
 
 class duel_backend(backend):
     @staticmethod
     def try_to_import_pcrduel_scorecounter():
-        possible_locations = [
-            'hoshino.modules.pcrduel.pcrduel',
-            'hoshino.modules.pcrduel.PcrDuel',
-            'hoshino.modules.pcrduel.ScoreCounter',
-
-            'hoshino.modules.priconne.pcrduel',
-            'hoshino.modules.priconne.PcrDuel',
-            'hoshino.modules.priconne.ScoreCounter',
-
-            'hoshino.modules.priconne.pcrduel.pcrduel',
-            'hoshino.modules.priconne.pcrduel.PcrDuel',
-            'hoshino.modules.priconne.pcrduel.ScoreCounter',
-        ]
-        for loc in possible_locations:
+        from nonebot.plugin import PluginManager
+        for name in PluginManager._plugins:
+            plugin: Plugin = PluginManager._plugins[name]
             try:
-                return import_module(loc)
+                return plugin.module.ScoreCounter
             except:
                 pass
-    
+            try:
+                return plugin.module.ScoreCounter2
+            except:
+                pass
+        return None
+
     def __init__(self):
-        ScoreCounter2 = duel_backend.try_to_import_pcrduel_scorecounter().ScoreCounter2
-        self.sc = ScoreCounter2()
-    
+        ScoreCounter = duel_backend.try_to_import_pcrduel_scorecounter()
+        self.sc = ScoreCounter()
+        new_logger('duel-backend').info(f'using duel backend from {ScoreCounter.__module__}')
+
     def __getitem__(self, indices):
         return self.sc._get_score(indices[0], indices[1])
     
