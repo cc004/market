@@ -37,17 +37,18 @@ def mgr_lazyload(): # ensure all plugins have been loaded
             ]
         )
 
+        mgr.schedule_products()
 
 
 @sv.on_rex(r'^(买入|卖出)(.*?)\*(\d*.?\d*)$')
 async def buy_or_sell(bot, ev):
     mgr_lazyload()
-    await bot.finish(ev, await (mgr.sell_products if ev['match'].group(1) == '卖出' else mgr.buy_products)(str(ev['group_id']), str(ev['user_id']), ev['match'].group(2).strip(), float(ev['match'].group(3))), at_sender=True)
+    await bot.finish(ev, (mgr.sell_products if ev['match'].group(1) == '卖出' else mgr.buy_products)(str(ev['group_id']), str(ev['user_id']), ev['match'].group(2).strip(), float(ev['match'].group(3))), at_sender=True)
 
 @sv.on_rex(r'^市场列表$')
 async def buy_or_sell(bot, ev):
     mgr_lazyload()
-    await bot.finish(ev, await mgr.list_products(), at_sender=True)
+    await bot.finish(ev, mgr.list_products(), at_sender=True)
 
 @sv.on_rex(r'^仓库列表$')
 async def buy_or_sell(bot, ev):
