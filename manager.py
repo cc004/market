@@ -7,7 +7,7 @@ from math import ceil, floor
 class manager:
     @staticmethod
     def _tax_cost(origin):
-        return 0.01 * origin
+        return 0.003 * origin
 
     @staticmethod
     def _format_num(x):
@@ -61,14 +61,14 @@ class manager:
             return f"找不到物品{item}"
         bal = self.balance[gid, uid, item]
         if bal < val:
-            return f"物品不足，你只有{item}x{bal:.2}"
+            return f"物品不足，你只有{item}x{manager._format_num(bal)}"
         
         origin = self.products[item].price * val
         cost = floor(origin - manager._tax_cost(origin))
         self.balance[gid, uid, item] = bal - val
         self.backend[gid, uid] += cost
 
-        return f"成功卖出了{item}x{val:.2}，获得了{manager._format_negcost(origin)}"
+        return f"成功卖出了{item}x{manager._format_num(val)}，获得了{manager._format_negcost(origin)}"
     
     def list_products(self):
         contents = []
