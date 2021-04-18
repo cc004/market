@@ -17,19 +17,34 @@ class duel_backend(backend):
         for name in PluginManager._plugins:
             plugin: Plugin = PluginManager._plugins[name]
             try:
-                return plugin.module.ScoreCounter
+                return plugin.module.ScoreCounter()
             except:
                 pass
             try:
-                return plugin.module.ScoreCounter2
+                return plugin.module.ScoreCounter2()
+            except:
+                pass
+            try:
+                return plugin.module.ScoreCounter.ScoreCounter()
+            except:
+                pass
+            try:
+                return plugin.module.ScoreCounter.ScoreCounter2()
+            except:
+                pass
+            try:
+                return plugin.module.ScoreCounter2.ScoreCounter()
+            except:
+                pass
+            try:
+                return plugin.module.ScoreCounter2.ScoreCounter2()
             except:
                 pass
         return None
 
     def __init__(self):
-        ScoreCounter = duel_backend.try_to_import_pcrduel_scorecounter()
-        self.sc = ScoreCounter()
-        new_logger('duel-backend').info(f'using duel backend from {ScoreCounter.__module__}')
+        self.sc = duel_backend.try_to_import_pcrduel_scorecounter()
+        new_logger('duel-backend').info(f'using duel backend from {self.sc.__class__.__module__}')
 
     def __getitem__(self, indices):
         return self.sc._get_score(indices[0], indices[1])
