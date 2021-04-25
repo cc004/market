@@ -12,7 +12,7 @@ class manager:
     @staticmethod
     def _format_num(x):
         x = float(x)
-        if x > 1000:
+        if x >= 1000:
             return f'{x:.1f}'
         else:
             return f'{x:.4}'

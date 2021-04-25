@@ -74,6 +74,15 @@ class json_backend(backend):
         self.config.json[gid][uid] = value
         self.config.save()
 
+class multiplier_backend(backend):
+    def __init__(self, base: backend, k=1):
+        self.base = base
+        self.k = k
+    def __getitem__(self, indices) -> int:
+        return self.base[indices] / self.k
+    def __setitem__(self, indices, value: int):
+        self.base[indices] = self.k * value
+
 class balance:
     def __init__(self):
         self.config = config('balance.json')
