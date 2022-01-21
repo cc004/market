@@ -94,7 +94,17 @@ class sina_product(api_product):
 
     def _converter(self, text) -> object:
         return text.split(',')[3]
+class qq_product(api_product):
+    def __init__(self, id, name, multiplier=1.0):
+        self.id = id
+        super().__init__(name, multiplier)
+    
+    @property
+    def url(self) -> str:
+        return f"http://qt.gtimg.cn/q=s_{self.id}"
 
+    def converter(self, text) -> object:
+        return text.split('~')[3]
 import json
 
 class coincap_product(api_product):

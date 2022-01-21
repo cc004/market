@@ -1,6 +1,6 @@
 from .manager import manager
 from .backend import json_backend, balance, duel_backend, multiplier_backend
-from .product import coincap_product, multiplier_product, sina_product, sochain_product, cryptocompare_product
+from .product import coincap_product, multiplier_product, qq_product, sochain_product, cryptocompare_product
 from hoshino.service import Service
 from nonebot import on_startup
 
@@ -26,11 +26,11 @@ async def _load_manager(): # ensure all plugins have been loaded
         multiplier_backend(be, 1),
         balance(),
         [
-            sina_product("sh601005", "大头菜"),
-            sina_product("sh600276", "霓裳花"),
-            sina_product("sh601166", "琉璃百合"),
-            sina_product("sh601012", "琉璃袋"),
-            sina_product("sh600519", "椰奶"),
+            qq_product("sh601005", "大头菜"),
+            qq_product("sh600276", "霓裳花"),
+            qq_product("sh601166", "琉璃百合"),
+            qq_product("sh601012", "琉璃袋"),
+            qq_product("sh600519", "椰奶"),
             multiplier_product(cryptocompare_product("btc:usd", "派蒙"), .1),
             multiplier_product(sochain_product("doge:usd", "优衣"), 10),
             #coincap_product("uniswap", "琉璃百合"),
